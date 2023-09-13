@@ -1,0 +1,9 @@
+doc/**
+test/**
+example/android
+example/ios
+example/web
+example/test
+example/README.md
+example/analysis_options.yaml
+example/pubspec.yaml
