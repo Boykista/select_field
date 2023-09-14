@@ -34,7 +34,7 @@ class MenuDecoration<T> {
   /// Will be called with indices greater than or equal to zero and less than `options.length - 1`.
   final Widget Function(BuildContext context, int index)? separatorBuilder;
 
-  /// Specifies `child` widget inside default `TextButton`
+  /// Specifies `child` widget of a default `TextButton` menu option widget.
   final Widget Function(BuildContext context, Option<T> option)? childBuilder;
 
   MenuDecoration({

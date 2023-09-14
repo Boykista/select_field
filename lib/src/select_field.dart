@@ -40,12 +40,12 @@ class SelectField<T> extends StatefulWidget {
 
   /// `Text` that suggests what sort of input the field accepts.
   ///
-  /// See [InputDecoration.hintText]
+  /// See [InputDecoration.hintText].
   final String? hint;
 
   /// The `border`, `labels`, `icons`, and `styles` used to decorate `input field`.
   ///
-  /// See [InputDecoration]
+  /// See [InputDecoration].
   final InputDecoration? inputDecoration;
 
   /// Style describing how to format and paint `text` of `input field`.
@@ -99,6 +99,7 @@ class SelectField<T> extends StatefulWidget {
   ///           ),
   ///        );
   ///      },
+  ///   ),
   /// ```
   final Widget Function(
     BuildContext context,

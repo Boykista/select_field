@@ -1,6 +1,6 @@
 # Select Field
 
-A highly customizable, simple and easy to use input field for creating a dropdown list of options that users can select from.
+Simple, easy and highly customizable input field for creating a dropdown list of selectable options.
 
 ## Key Features
 
@@ -91,7 +91,7 @@ class StyledSelectField extends StatelessWidget {
 }
 ```
 
-You can also call optionBuilder function to fully create your own widgets in dropdown menu
+You can also call optionBuilder function to add your own widgets in dropdown menu:
 
 ```dart
 SelectField<String>(
@@ -100,7 +100,8 @@ SelectField<String>(
         return Material(
           color: Colors.transparent,
           child: GestureDetector(
-            // You have to call this function if menu's default behaviour is needed
+            // You have to call this function if menu's
+            // default behaviour is needed (expanded or collapsed)
             onTap: () => onOptionSelected(option),
             child: selectedOption == option
                 ? Container(
@@ -133,17 +134,3 @@ SelectField<String>(
 ```
 
 More in this <a href="https://github.com/Boykista/select_field/blob/main/example/lib/main.dart" >example</a>
-
-<!-- ## Installation
-
-Add the dependency
-
-```
-dart pub add select_field
-```
-
-Import the package
-
-```
-import 'package:select_field/select_field.dart';
-``` -->

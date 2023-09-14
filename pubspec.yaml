@@ -1,7 +1,8 @@
 name: select_field
-description: A highly customizable, simple and easy to use Flutter widget for creating a dropdown list of options that users can select from.
-version: 0.0.1
+description: Simple, easy and highly customizable input field for creating a dropdown list of selectable options.
+version: 0.1.0
 homepage: https://github.com/Boykista/select_field
+repository: https://github.com/Boykista/select_field
 
 environment:
   sdk: ">=3.1.0 <4.0.0"
@@ -15,5 +16,3 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-
-flutter:
