@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Select field',
+      title: 'Select Field',
       theme: themeData,
       home: const MyHomePage(),
     );
