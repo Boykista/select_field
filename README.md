@@ -14,8 +14,8 @@ With Select Field, you can:
 
 Select Field has its limitations:
 
-- You cannot select multiple options simultaneously.
-- Custom animation of dropdown menu is not supported.
+- By default, you cannot select multiple options simultaneously.
+- Custom animation of a dropdown menu is not supported.
 
 ## Example
 

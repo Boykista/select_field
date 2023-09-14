@@ -1,3 +1,3 @@
 ## 0.1.0 - Sep 14, 2023
 
-- Select field - first release
+- Select Field - first release
