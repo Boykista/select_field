@@ -19,8 +19,8 @@ Select Field has its limitations:
 
 ## Example
 
-<p><img src="https://github.com/Boykista/select_field/blob/main/doc/menu_below.gif" alt="An animated image of the select field (menu below)" height="400"/>
-<img src="https://github.com/Boykista/select_field/blob/main/doc/menu_above.gif" alt="An animated image of the select field (menu above)" height="400"/>
+<p><img src="https://github.com/Boykista/select_field/raw/main/doc/menu_below.gif" alt="An animated image of the select field (menu below)" height="400"/>
+<img src="https://github.com/Boykista/select_field/raw/main/doc/menu_above.gif" alt="An animated image of the select field (menu above)" height="400"/>
 <p>
 
 ```dart
@@ -132,5 +132,3 @@ SelectField<String>(
       },
     ),
 ```
-
-More in this <a href="https://github.com/Boykista/select_field/blob/main/example/lib/main.dart" >example</a>
