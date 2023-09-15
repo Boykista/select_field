@@ -97,9 +97,7 @@ You can also call optionBuilder function to add your own widgets in dropdown men
 SelectField<String>(
       options: options,
       optionBuilder: (context, option, onOptionSelected) {
-        return Material(
-          color: Colors.transparent,
-          child: GestureDetector(
+        return GestureDetector(
             // You have to call this function if menu's
             // default behaviour is needed (expanded or collapsed)
             onTap: () => onOptionSelected(option),
@@ -127,7 +125,6 @@ SelectField<String>(
                       ),
                     ),
                   ),
-          ),
         );
       },
     ),

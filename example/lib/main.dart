@@ -170,42 +170,39 @@ class _CustomMenuSelectFieldState<String>
     return SelectField<String>(
       menuController: menuController,
       options: widget.options,
-      menuPosition: MenuPosition.above,
+      menuPosition: MenuPosition.below,
       optionBuilder: (context, option, onOptionSelected) {
-        return Material(
-          color: Colors.transparent,
-          child: GestureDetector(
-            onTap: () {
-              onOptionSelected(option);
-              setState(() {
-                selectedOption = option;
-              });
-            },
-            child: selectedOption == option
-                ? Container(
-                    height: 60,
-                    color: Colors.deepOrange.withOpacity(0.2),
-                    child: Center(
-                      child: Text(
-                        option.label,
-                        style: const TextStyle(
-                          color: Colors.deepOrange,
-                        ),
-                      ),
-                    ),
-                  )
-                : SizedBox(
-                    height: 60,
-                    child: Center(
-                      child: Text(
-                        option.label,
-                        style: TextStyle(
-                          color: Colors.orange[700],
-                        ),
+        return GestureDetector(
+          onTap: () {
+            onOptionSelected(option);
+            setState(() {
+              selectedOption = option;
+            });
+          },
+          child: selectedOption == option
+              ? Container(
+                  height: 60,
+                  color: Colors.deepOrange.withOpacity(0.2),
+                  child: Center(
+                    child: Text(
+                      option.label,
+                      style: const TextStyle(
+                        color: Colors.deepOrange,
                       ),
                     ),
                   ),
-          ),
+                )
+              : SizedBox(
+                  height: 60,
+                  child: Center(
+                    child: Text(
+                      option.label,
+                      style: TextStyle(
+                        color: Colors.orange[700],
+                      ),
+                    ),
+                  ),
+                ),
         );
       },
       menuDecoration: MenuDecoration(

@@ -117,99 +117,102 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
       followerAnchor: alignment,
       child: TapRegion(
         groupId: SelectFieldTapRegion.fieldAndOverlay,
-        child: AnimatedContainer(
-          margin: widget.decoration?.margin,
-          duration: widget.decoration?.animationDuration ??
-              const Duration(milliseconds: 350),
-          onEnd: () {
-            if (!widget.menuController.isExpanded) {
-              setState(() {
-                hideBoxDecoration = true;
-              });
-            }
-          },
-          clipBehavior: !hideBoxDecoration ? Clip.hardEdge : Clip.none,
-          height: overlayHeight,
-          decoration: !hideBoxDecoration
-              ? widget.decoration?.backgroundDecoration ??
-                  BoxDecoration(
-                    color: Theme.of(context).inputDecorationTheme.fillColor,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context).colorScheme.shadow,
-                        offset: Offset(0, isOverlayAbove ? -1 : 1),
-                      )
-                    ],
-                  )
-              : null,
-          child: ListView.separated(
-            reverse: isOverlayAbove,
-            shrinkWrap: true,
-            itemCount: widget.options.length,
-            padding: EdgeInsets.zero,
-            itemBuilder: (context, index) {
-              final option = widget.options[index];
-
-              if (widget.builder != null) {
-                return widget.builder!(context, option, onOptionSelected);
+        child: Material(
+          color: Colors.transparent,
+          child: AnimatedContainer(
+            margin: widget.decoration?.margin,
+            duration: widget.decoration?.animationDuration ??
+                const Duration(milliseconds: 350),
+            onEnd: () {
+              if (!widget.menuController.isExpanded) {
+                setState(() {
+                  hideBoxDecoration = true;
+                });
               }
-
-              return TextButton(
-                onPressed: () => onOptionSelected(option),
-                style: widget.decoration?.buttonStyle ??
-                    TextButton.styleFrom(
-                      fixedSize: const Size(double.infinity, 60),
-                      backgroundColor:
-                          Theme.of(context).inputDecorationTheme.fillColor,
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.all(16),
-                      shape: const RoundedRectangleBorder(),
-                    ),
-                child: widget.decoration?.childBuilder != null
-                    ? widget.decoration!.childBuilder!(context, option)
-                    : Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              option.label,
-                              style: widget.decoration?.textStyle ??
-                                  widget.decoration?.buttonStyle?.textStyle
-                                      ?.resolve({}) ??
-                                  TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(context)
-                                        .textButtonTheme
-                                        .style
-                                        ?.foregroundColor
-                                        ?.resolve({}),
-                                  ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          if (option == selectedOption)
-                            Icon(
-                              Icons.check_circle_outline_rounded,
-                              color: Theme.of(context)
-                                  .textButtonTheme
-                                  .style
-                                  ?.foregroundColor
-                                  ?.resolve({}),
-                            )
-                        ],
-                      ),
-              );
             },
-            separatorBuilder: (context, index) =>
-                widget.decoration?.separatorBuilder != null
-                    ? widget.decoration!.separatorBuilder!(context, index)
-                    : Container(
-                        height: 1,
-                        width: double.infinity,
-                        color: Theme.of(context).dividerColor,
+            clipBehavior: !hideBoxDecoration ? Clip.hardEdge : Clip.none,
+            height: overlayHeight,
+            decoration: !hideBoxDecoration
+                ? widget.decoration?.backgroundDecoration ??
+                    BoxDecoration(
+                      color: Theme.of(context).inputDecorationTheme.fillColor,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.shadow,
+                          offset: Offset(0, isOverlayAbove ? -1 : 1),
+                        )
+                      ],
+                    )
+                : null,
+            child: ListView.separated(
+              reverse: isOverlayAbove,
+              shrinkWrap: true,
+              itemCount: widget.options.length,
+              padding: EdgeInsets.zero,
+              itemBuilder: (context, index) {
+                final option = widget.options[index];
+
+                if (widget.builder != null) {
+                  return widget.builder!(context, option, onOptionSelected);
+                }
+
+                return TextButton(
+                  onPressed: () => onOptionSelected(option),
+                  style: widget.decoration?.buttonStyle ??
+                      TextButton.styleFrom(
+                        fixedSize: const Size(double.infinity, 60),
+                        backgroundColor:
+                            Theme.of(context).inputDecorationTheme.fillColor,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.all(16),
+                        shape: const RoundedRectangleBorder(),
                       ),
+                  child: widget.decoration?.childBuilder != null
+                      ? widget.decoration!.childBuilder!(context, option)
+                      : Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                option.label,
+                                style: widget.decoration?.textStyle ??
+                                    widget.decoration?.buttonStyle?.textStyle
+                                        ?.resolve({}) ??
+                                    TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Theme.of(context)
+                                          .textButtonTheme
+                                          .style
+                                          ?.foregroundColor
+                                          ?.resolve({}),
+                                    ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (option == selectedOption)
+                              Icon(
+                                Icons.check_circle_outline_rounded,
+                                color: Theme.of(context)
+                                    .textButtonTheme
+                                    .style
+                                    ?.foregroundColor
+                                    ?.resolve({}),
+                              )
+                          ],
+                        ),
+                );
+              },
+              separatorBuilder: (context, index) =>
+                  widget.decoration?.separatorBuilder != null
+                      ? widget.decoration!.separatorBuilder!(context, index)
+                      : Container(
+                          height: 1,
+                          width: double.infinity,
+                          color: Theme.of(context).dividerColor,
+                        ),
+            ),
           ),
         ),
       ),
