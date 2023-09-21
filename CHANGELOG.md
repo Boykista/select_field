@@ -1,3 +1,7 @@
+## 0.1.3
+
+- Updated readme
+
 ## 0.1.2
 
 - Added Material widget as a parent to OptionsMenu widget

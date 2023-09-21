@@ -129,3 +129,5 @@ SelectField<String>(
       },
     ),
 ```
+
+More on <a href="https://github.com/Boykista/select_field/">https://github.com/Boykista/select_field/</a>.
