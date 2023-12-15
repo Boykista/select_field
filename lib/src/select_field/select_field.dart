@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:select_field/src/option.dart';
 import 'package:select_field/src/menu_decoration.dart';
 import 'package:select_field/src/options_menu.dart';
-import 'package:select_field/src/select_field_menu_controller.dart';
+import 'package:select_field/src/select_field/select_field_menu_controller.dart';
 
 typedef IconBuilder = Widget Function(BuildContext context, bool isExpanded);
 

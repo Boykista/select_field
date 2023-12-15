@@ -49,23 +49,25 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Text(
-              'Custom style select field',
-              style: TextStyle(
-                color: Colors.brown[700],
-              ),
-            ),
-            StyledSelectField(
-              options: options,
-            ),
-            const SizedBox(height: 32),
-            Text(
-              'Custom menu select field',
-              style: TextStyle(
-                color: Colors.deepOrange[700],
-              ),
-            ),
-            CustomMenuSelectField(options: options),
+            // Text(
+            //   'Custom style select field',
+            //   style: TextStyle(
+            //     color: Colors.brown[700],
+            //   ),
+            // ),
+            // StyledSelectField(
+            //   options: options,
+            // ),
+            // const SizedBox(height: 32),
+            // Text(
+            //   'Custom menu select field',
+            //   style: TextStyle(
+            //     color: Colors.deepOrange[700],
+            //   ),
+            // ),
+            // CustomMenuSelectField(options: options),
+            // const SizedBox(height: 32),
+            MultiSelectDemo<String>(options: options),
           ],
         ),
       ),
@@ -279,6 +281,22 @@ class _CustomMenuSelectFieldState<String>
           borderRadius: BorderRadius.circular(8),
         ),
       ),
+    );
+  }
+}
+
+class MultiSelectDemo<T> extends StatelessWidget {
+  final List<Option<T>> options;
+  const MultiSelectDemo({
+    super.key,
+    required this.options,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiSelectField<T>(
+      options: options,
+      fieldText: 'Select fruit',
     );
   }
 }
