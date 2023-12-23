@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:select_field/select_field.dart';
+import 'package:select_field/src/multi_select_field/multi_select_field_menu_controller.dart';
 
 class MultiSelectField<T> extends StatefulWidget {
   /// List of options for the select field menu.
@@ -21,7 +22,7 @@ class MultiSelectField<T> extends StatefulWidget {
   final TextEditingController? textController;
 
   /// Controls if menu is expanded
-  final bool isMenuExpanded;
+  final bool isInitiallyExpanded;
 
   /// See [FocusNode]
   final FocusNode? focusNode;
@@ -69,6 +70,7 @@ class MultiSelectField<T> extends StatefulWidget {
   final Widget Function(
     BuildContext context,
     Option<T> option,
+    bool isSelected,
     void Function(Option<T> option) onOptionSelected,
   )? optionBuilder;
 
@@ -98,6 +100,9 @@ class MultiSelectField<T> extends StatefulWidget {
   /// Returns an error string to display if the input is invalid, or null otherwise.
   final String? Function(String? value)? validator;
 
+  /// This
+  final MultiSelectCustomControl<T>? customControl;
+
   const MultiSelectField({
     super.key,
     required this.options,
@@ -106,7 +111,7 @@ class MultiSelectField<T> extends StatefulWidget {
     this.onTextChanged,
     this.onOptionsSelected,
     this.textController,
-    this.isMenuExpanded = false,
+    this.isInitiallyExpanded = false,
     this.focusNode,
     this.onTap,
     this.onTapOutside,
@@ -128,6 +133,7 @@ class MultiSelectField<T> extends StatefulWidget {
     this.enabled,
     this.onSaved,
     this.validator,
+    this.customControl,
   });
 
   @override
@@ -145,16 +151,17 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     textController.text = text;
   }
 
+// TODO: ADD SELECTED OPTIONS TO MENU CONTROLLER AND NOT AS STATE LIKE HERE
   void onOptionSelected(Option<T> option) {
     if (selectedOptions.contains(option)) {
       selectedOptions.remove(option);
-      menuController.removeSelectedOption = option;
+      menuController.selectedOptions = selectedOptions;
       if (widget.fieldText == null) {
         addControllerText(option.label);
       }
     } else {
       selectedOptions.add(option);
-      menuController.addSelectedOption = option;
+      menuController.selectedOptions = selectedOptions;
       if (widget.fieldText == null) {
         addControllerText(option.label);
       }
@@ -169,8 +176,9 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
   void initState() {
     super.initState();
     textController = TextEditingController(text: widget.fieldText);
+
     menuController = MultiSelectFieldMenuController<T>(
-      isExpanded: widget.isMenuExpanded,
+      isExpanded: widget.isInitiallyExpanded,
       customControl: CustomControl(onOptionSelected: onOptionSelected),
     );
 
@@ -182,8 +190,9 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
   @override
   void didUpdateWidget(covariant MultiSelectField<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.isMenuExpanded != oldWidget.isMenuExpanded) {
-      menuController.isExpanded = widget.isMenuExpanded;
+    if (widget.customControl?.selectedOptions !=
+        oldWidget.customControl?.selectedOptions) {
+      menuController.selectedOptions = widget.customControl!.selectedOptions;
     }
   }
 
@@ -196,10 +205,14 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return SelectField(
+    return SelectField<T>(
       options: widget.options,
       textController: textController,
       menuController: menuController,
+      menuPosition: widget.menuPosition,
+      hint: widget.hint,
+      onTextChanged: widget.onTextChanged,
+      onTapOutside: widget.onTapOutside,
       focusNode: widget.focusNode,
       onTap: widget.onTap,
       inputDecoration: widget.inputDecoration,
@@ -213,9 +226,19 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       enabled: widget.enabled,
       onSaved: widget.onSaved,
       validator: widget.validator,
+      prefixIconBuilder: widget.prefixIconBuilder,
+      suffixIconBuilder: widget.suffixIconBuilder,
+      optionBuilder: widget.optionBuilder != null
+          ? (context, option, onOptionSelected) => widget.optionBuilder!(
+                context,
+                option,
+                selectedOptions.contains(option),
+                onOptionSelected,
+              )
+          : null,
       menuDecoration: widget.menuDecoration ??
           MenuDecoration(
-            childBuilder: (context, option) {
+            childBuilder: (context, option, [isSelected]) {
               return Row(
                 children: [
                   Expanded(
@@ -234,7 +257,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (selectedOptions.contains(option))
+                  if (isSelected != null && isSelected)
                     Icon(
                       Icons.check_circle_outline_rounded,
                       color: Theme.of(context)

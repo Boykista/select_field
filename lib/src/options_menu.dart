@@ -152,6 +152,7 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
                 final option = widget.options[index];
+                final isSelected = option == selectedOption;
 
                 if (widget.builder != null) {
                   return widget.builder!(context, option, onOptionSelected);
@@ -191,7 +192,7 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (option == selectedOption)
+                            if (isSelected)
                               Icon(
                                 Icons.check_circle_outline_rounded,
                                 color: Theme.of(context)

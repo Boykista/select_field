@@ -13,7 +13,7 @@ final ThemeData themeData = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.green,
+    primary: Colors.purple[900]!,
     onPrimary: Colors.white,
     secondary: Colors.lightGreen,
     onSecondary: Colors.white,
@@ -21,8 +21,8 @@ final ThemeData themeData = ThemeData(
     onError: Colors.black,
     background: Colors.white,
     onBackground: Colors.black,
-    surface: Colors.green,
-    onSurface: Colors.brown[700]!,
+    surface: Colors.purple[900]!,
+    onSurface: Colors.purple,
     shadow: Colors.brown[300]!,
   ),
   textTheme: const TextTheme(
@@ -33,9 +33,9 @@ final ThemeData themeData = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: Colors.green[100],
-    focusColor: Colors.green,
-    iconColor: Colors.green,
+    fillColor: Colors.purple[100],
+    focusColor: Colors.purple[900]!,
+    iconColor: Colors.purple[900]!,
     contentPadding: const EdgeInsets.all(16),
     errorStyle: TextStyle(
       fontSize: 16,
@@ -45,11 +45,11 @@ final ThemeData themeData = ThemeData(
     hintStyle: const TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w400,
-      color: Colors.grey,
+      color: Colors.purple,
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.green[300]!,
+        color: Colors.purple[300]!,
         width: 1,
       ),
       borderRadius: BorderRadius.circular(8),
@@ -59,8 +59,8 @@ final ThemeData themeData = ThemeData(
       borderRadius: BorderRadius.circular(8),
     ),
     focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(
-        color: Colors.green,
+      borderSide: BorderSide(
+        color: Colors.purple[900]!,
         width: 2,
       ),
       borderRadius: BorderRadius.circular(8),
@@ -87,9 +87,9 @@ final ThemeData themeData = ThemeData(
     ),
   ),
   textSelectionTheme: TextSelectionThemeData(
-    selectionHandleColor: Colors.green,
-    cursorColor: Colors.green,
-    selectionColor: Colors.green[300],
+    selectionHandleColor: Colors.purple[900]!,
+    cursorColor: Colors.purple[900]!,
+    selectionColor: Colors.purple[300],
   ),
-  dividerColor: Colors.green,
+  dividerColor: Colors.purple[900]!,
 );

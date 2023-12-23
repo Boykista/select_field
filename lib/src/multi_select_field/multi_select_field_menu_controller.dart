@@ -13,19 +13,6 @@ class MultiSelectFieldMenuController<T> extends SelectFieldMenuController<T> {
     _selectedOptionsNotifier = ValueNotifier([]);
   }
 
-  set addSelectedOption(Option<T> option) {
-    final newValue = _selectedOptionsNotifier.value.toList();
-    newValue.add(option);
-    _selectedOptionsNotifier.value = newValue;
-  }
-
-  set removeSelectedOption(Option<T> option) {
-    _selectedOptionsNotifier.value;
-    final newValue = _selectedOptionsNotifier.value.toList();
-    newValue.remove(option);
-    _selectedOptionsNotifier.value = newValue;
-  }
-
   @override
   set isExpanded(bool value) {
     _notifier.value = value;
@@ -33,6 +20,12 @@ class MultiSelectFieldMenuController<T> extends SelectFieldMenuController<T> {
 
   @override
   bool get isExpanded => _notifier.value;
+
+  List<Option<T>> get selectedOptions => _selectedOptionsNotifier.value;
+
+  set selectedOptions(List<Option<T>> options) {
+    _selectedOptionsNotifier.value = [...options];
+  }
 
   @override
   void addListener(void Function() onChanged) {
@@ -51,63 +44,3 @@ class MultiSelectFieldMenuController<T> extends SelectFieldMenuController<T> {
     _selectedOptionsNotifier.dispose();
   }
 }
-
-// class CustomControl<T> {
-//   /// ```dart
-//   /// // DEFAULT
-//   /// if (widget.onTap != null) {
-//   ///    widget.onTap!();
-//   ///  }
-//   /// final isExpanded = menuController.isExpanded;
-//   /// menuController.isExpanded = !menuController.isExpanded;
-//   ///
-//   /// if (isExpanded) {
-//   ///   await Future.delayed(widget.optionsDecoration?.animationDuration ??
-//   ///       const Duration(milliseconds: 350));
-//   ///
-//   ///   focusNode.unfocus();
-//   /// }
-//   ///   ```
-//   final void Function()? onTap;
-
-//   /// ```dart
-//   /// // DEFAULT
-//   /// if (widget.onTapOutside != null) {
-//   ///  widget.onTapOutside!();
-//   /// }
-//   /// if (menuController.isExpanded) {
-//   ///  menuController.isExpanded = false;
-//   ///  await Future.delayed(
-//   ///    widget.optionsDecoration?.animationDuration ??
-//   ///         const Duration(milliseconds: 350),
-//   ///   );
-//   /// }
-//   /// if (focusNode.hasFocus) {
-//   ///   focusNode.unfocus();
-//   /// }
-//   /// ```
-//   final void Function()? onTapOutside;
-
-//   /// ```dart
-//   /// // DEFAULT
-//   /// if (widget.onOptionSelected != null) {
-//   ///  widget.onOptionSelected!(option);
-//   /// }
-//   /// setControllerText(option.label);
-//   /// menuController.isExpanded = false;
-//   ///
-//   /// await Future.delayed(
-//   ///  widget.optionsDecoration?.animationDuration ??
-//   ///      const Duration(milliseconds: 350),
-//   /// );
-//   ///
-//   /// focusNode.unfocus();
-//   /// ```
-//   final void Function(Option<T> option)? onOptionSelected;
-
-//   CustomControl({
-//     this.onTap,
-//     this.onTapOutside,
-//     this.onOptionSelected,
-//   });
-// }
