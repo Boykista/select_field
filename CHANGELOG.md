@@ -1,3 +1,8 @@
+## 1.0.0
+
+- MultiSelectField() widget added
+- Removed customControl property from SelectFieldMenuController()
+
 ## 0.1.3
 
 - Updated readme

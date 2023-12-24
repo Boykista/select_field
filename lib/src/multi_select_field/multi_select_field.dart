@@ -8,7 +8,7 @@ class MultiSelectField<T> extends StatefulWidget {
   /// Initial option to display in input field
   final List<Option<T>>? initialOptions;
 
-  /// Sets the text of the [TextFormField]
+  /// Sets the immutable text of the [TextFormField]
   final String? fieldText;
 
   /// Callback on `text change` in input field
@@ -66,6 +66,45 @@ class MultiSelectField<T> extends StatefulWidget {
   final IconBuilder? prefixIconBuilder;
 
   /// Callback for creating `custom option widget`.
+  ///
+  /// You must call `onOptionSelected(option)` when user presses (selects) the option.
+  ///
+  /// ```dart
+  ///       MultiSelectField<String>(
+  ///         options: widget.options,
+  ///         initialOptions: initalOptions,
+  ///         hint: 'Select fruit',
+  ///         optionBuilder: (context, option, isSelected, onOptionSelected) {
+  ///           return GestureDetector(
+  ///             onTap: () => onOptionSelected(option),
+  ///             child: isSelected
+  ///                 ? Container(
+  ///                     height: 60,
+  ///                     color: Colors.purple.withOpacity(0.2),
+  ///                     child: Center(
+  ///                       child: Text(
+  ///                         option.label,
+  ///                         style: const TextStyle(
+  ///                           color: Colors.purple,
+  ///                         ),
+  ///                       ),
+  ///                     ),
+  ///                   )
+  ///                 : SizedBox(
+  ///                     height: 60,
+  ///                     child: Center(
+  ///                       child: Text(
+  ///                         option.label,
+  ///                         style: TextStyle(
+  ///                           color: Colors.purple[700],
+  ///                         ),
+  ///                       ),
+  ///                     ),
+  ///                   ),
+  ///           );
+  ///         },
+  //       ),
+  /// ```
   final Widget Function(
     BuildContext context,
     Option<T> option,
@@ -168,16 +207,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     if (widget.onTap != null) {
       widget.onTap!();
     }
-
-    final isExpanded = menuController.isExpanded;
     menuController.isExpanded = !menuController.isExpanded;
-
-    if (isExpanded) {
-      await Future.delayed(widget.menuDecoration?.animationDuration ??
-          const Duration(milliseconds: 350));
-
-      focusNode.unfocus();
-    }
   }
 
   void handleOnTapOutside() async {
@@ -187,13 +217,6 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
 
     if (menuController.isExpanded) {
       menuController.isExpanded = false;
-      await Future.delayed(
-        widget.menuDecoration?.animationDuration ??
-            const Duration(milliseconds: 350),
-      );
-    }
-    if (focusNode.hasFocus) {
-      focusNode.unfocus();
     }
   }
 
@@ -209,6 +232,14 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       menuController.selectedOptions = widget.initialOptions!;
       setControllerText();
     }
+
+    menuController.addListener(() async {
+      if (!menuController.isExpanded && focusNode.hasFocus) {
+        await Future.delayed(widget.menuDecoration?.animationDuration ??
+            const Duration(milliseconds: 350));
+        focusNode.unfocus();
+      }
+    });
   }
 
   @override

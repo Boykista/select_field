@@ -53,25 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // Text(
-            //   'Custom style select field',
-            //   style: TextStyle(
-            //     color: Colors.brown[700],
-            //   ),
-            // ),
-            // StyledSelectField(
-            //   options: options,
-            // ),
-            // const SizedBox(height: 32),
-            // Text(
-            //   'Custom menu select field',
-            //   style: TextStyle(
-            //     color: Colors.deepOrange[700],
-            //   ),
-            // ),
-            // CustomMenuSelectField(options: options),
-            // const SizedBox(height: 32),
-            // MultiSelectOptionsControl<String>(options: options),
+            StyledSelectField(options: options),
+            const SizedBox(height: 32),
+            CustomMenuSelectField(options: options),
+            const SizedBox(height: 32),
+            MultiSelectOptionsControl<String>(options: options),
+            const SizedBox(height: 32),
             MultiSelectFieldDemo<String>(options: options)
           ],
         ),

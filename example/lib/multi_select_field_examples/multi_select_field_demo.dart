@@ -34,7 +34,7 @@ class _MultiSelectFieldDemoState<String>
           hint: 'Select fruit',
           optionBuilder: (context, option, isSelected, onOptionSelected) {
             return GestureDetector(
-              onTap: () => onOptionSelected(option),
+              onTap: () {},
               child: isSelected
                   ? Container(
                       height: 60,

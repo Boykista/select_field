@@ -19,22 +19,6 @@ class SelectField<T> extends StatefulWidget {
   final void Function(String value)? onTextChanged;
 
   /// Callback when user `selects` the `option`
-  ///
-  /// Default:
-  /// ```dart
-  /// textController.text = option.label;
-  /// textController.selection =
-  /// TextSelection.collapsed(offset: textController.text.length);
-  ///
-  /// menuController.isExpanded = false;
-  ///
-  /// await Future.delayed(
-  ///   widget.menuDecoration?.animationDuration ??
-  ///     const Duration(milliseconds: 350),
-  /// );
-  ///
-  /// focusNode.unfocus();
-  /// ```
   final void Function(Option<T> option)? onOptionSelected;
 
   /// Specifies the [TextEditingController] for [SelectField].
@@ -49,37 +33,9 @@ class SelectField<T> extends StatefulWidget {
   final FocusNode? focusNode;
 
   /// Callback when input field is tapped.
-  ///
-  /// Deafult:
-  /// ```dart
-  /// final isExpanded = menuController.isExpanded;
-  /// menuController.isExpanded = !menuController.isExpanded;
-  ///
-  /// if (isExpanded) {
-  ///   await Future.delayed(widget.menuDecoration?.animationDuration ??
-  ///      const Duration(milliseconds: 350));
-  ///
-  ///   focusNode.unfocus();
-  /// }
-  /// ```
   final void Function()? onTap;
 
   /// Callback when tapped outside input field and options' menu.
-  ///
-  /// Default:
-  /// ```dart
-  /// if (menuController.isExpanded) {
-  ///   menuController.isExpanded = false;
-  ///   await Future.delayed(
-  ///      widget.menuDecoration?.animationDuration ??
-  ///         const Duration(milliseconds: 350),
-  ///   );
-  /// }
-  ///
-  /// if (focusNode.hasFocus) {
-  ///   focusNode.unfocus();
-  /// }
-  /// ```
   final void Function()? onTapOutside;
 
   /// `Text` that suggests what sort of input the field accepts.

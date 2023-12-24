@@ -17,19 +17,19 @@ class MultiSelectOptionsControl<String> extends StatefulWidget {
 class _MultiSelectOptionsControlState<String>
     extends State<MultiSelectOptionsControl<String>> {
   late final List<Option<String>> initalOptions;
-  late final MultiSelectFieldMenuController<String> customControl;
+  late final MultiSelectFieldMenuController<String> menuController;
 
   void onOptionSelected(List<Option<String>> options) {
     setState(() {
-      customControl.selectedOptions = options;
+      menuController.selectedOptions = options;
     });
   }
 
   void onOptionRemoved(Option<String> option) {
-    final options = customControl.selectedOptions;
+    final options = menuController.selectedOptions;
     options.remove(option);
     setState(() {
-      customControl.selectedOptions = options;
+      menuController.selectedOptions = options;
     });
   }
 
@@ -37,7 +37,10 @@ class _MultiSelectOptionsControlState<String>
   void initState() {
     super.initState();
     initalOptions = widget.options.sublist(1, 3);
-    customControl = MultiSelectFieldMenuController(isExpanded: true);
+    menuController = MultiSelectFieldMenuController(
+      isExpanded: true,
+      initalOptions: initalOptions,
+    );
   }
 
   @override
@@ -46,10 +49,9 @@ class _MultiSelectOptionsControlState<String>
       children: [
         MultiSelectField<String>(
           options: widget.options,
-          initialOptions: initalOptions,
           fieldText: 'Select fruit',
           onOptionsSelected: onOptionSelected,
-          menuController: customControl,
+          menuController: menuController,
           menuDecoration: MenuDecoration(
             childBuilder: (context, option) {
               return Row(
@@ -71,7 +73,7 @@ class _MultiSelectOptionsControlState<String>
                     ),
                   ),
                   Icon(
-                    customControl.selectedOptions.contains(option)
+                    menuController.selectedOptions.contains(option)
                         ? Icons.check_box_outlined
                         : Icons.check_box_outline_blank_outlined,
                     color: Theme.of(context)
@@ -88,7 +90,7 @@ class _MultiSelectOptionsControlState<String>
         Wrap(
           spacing: 10,
           runSpacing: 20,
-          children: customControl.selectedOptions
+          children: menuController.selectedOptions
               .map(
                 (option) => Chip(
                   label: Text(option.label),
