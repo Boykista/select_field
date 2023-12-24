@@ -71,8 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // ),
             // CustomMenuSelectField(options: options),
             // const SizedBox(height: 32),
-            MultiSelectOptionsControl<String>(options: options),
-            // MultiSelectFieldDemo<String>(options: options)
+            // MultiSelectOptionsControl<String>(options: options),
+            MultiSelectFieldDemo<String>(options: options)
           ],
         ),
       ),

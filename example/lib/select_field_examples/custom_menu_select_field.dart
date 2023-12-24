@@ -20,6 +20,20 @@ class _CustomMenuSelectFieldState<String>
   final SelectFieldMenuController<String> menuController =
       SelectFieldMenuController();
 
+  void handleOnTap() async {
+    menuController.isExpanded = !menuController.isExpanded;
+  }
+
+  void handleOnTapOutside() async {
+    if (menuController.isExpanded) {
+      menuController.isExpanded = false;
+    }
+  }
+
+  void handleOnOptionSelected(Option<String> option) async {
+    menuController.isExpanded = true;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -39,14 +53,15 @@ class _CustomMenuSelectFieldState<String>
     return SelectField<String>(
       menuController: menuController,
       options: widget.options,
+      onTap: handleOnTap,
+      onTapOutside: handleOnTapOutside,
+      onOptionSelected: handleOnOptionSelected,
       menuPosition: MenuPosition.below,
       optionBuilder: (context, option, onOptionSelected) {
         return GestureDetector(
           onTap: () {
             onOptionSelected(option);
-            setState(() {
-              selectedOption = option;
-            });
+            selectedOption = option;
           },
           child: selectedOption == option
               ? Container(

@@ -19,6 +19,22 @@ class SelectField<T> extends StatefulWidget {
   final void Function(String value)? onTextChanged;
 
   /// Callback when user `selects` the `option`
+  ///
+  /// Default:
+  /// ```dart
+  /// textController.text = option.label;
+  /// textController.selection =
+  /// TextSelection.collapsed(offset: textController.text.length);
+  ///
+  /// menuController.isExpanded = false;
+  ///
+  /// await Future.delayed(
+  ///   widget.menuDecoration?.animationDuration ??
+  ///     const Duration(milliseconds: 350),
+  /// );
+  ///
+  /// focusNode.unfocus();
+  /// ```
   final void Function(Option<T> option)? onOptionSelected;
 
   /// Specifies the [TextEditingController] for [SelectField].
@@ -33,9 +49,37 @@ class SelectField<T> extends StatefulWidget {
   final FocusNode? focusNode;
 
   /// Callback when input field is tapped.
+  ///
+  /// Deafult:
+  /// ```dart
+  /// final isExpanded = menuController.isExpanded;
+  /// menuController.isExpanded = !menuController.isExpanded;
+  ///
+  /// if (isExpanded) {
+  ///   await Future.delayed(widget.menuDecoration?.animationDuration ??
+  ///      const Duration(milliseconds: 350));
+  ///
+  ///   focusNode.unfocus();
+  /// }
+  /// ```
   final void Function()? onTap;
 
   /// Callback when tapped outside input field and options' menu.
+  ///
+  /// Default:
+  /// ```dart
+  /// if (menuController.isExpanded) {
+  ///   menuController.isExpanded = false;
+  ///   await Future.delayed(
+  ///      widget.menuDecoration?.animationDuration ??
+  ///         const Duration(milliseconds: 350),
+  ///   );
+  /// }
+  ///
+  /// if (focusNode.hasFocus) {
+  ///   focusNode.unfocus();
+  /// }
+  /// ```
   final void Function()? onTapOutside;
 
   /// `Text` that suggests what sort of input the field accepts.
@@ -78,9 +122,7 @@ class SelectField<T> extends StatefulWidget {
   ///      menuController: menuController,
   ///      options: widget.options,
   ///      optionBuilder: (context, option, onOptionSelected) {
-  ///        return Material(
-  ///          color: Colors.transparent,
-  ///          child: GestureDetector(
+  ///        return GestureDetector(
   ///              onTap: () {
   ///                onOptionSelected(option);
   ///              },
@@ -96,10 +138,9 @@ class SelectField<T> extends StatefulWidget {
   ///                  ),
   ///                ),
   ///              ),
-  ///           ),
-  ///        );
-  ///      },
-  ///   ),
+  ///           );
+  ///         },
+  ///       ),
   /// ```
   final Widget Function(
     BuildContext context,
@@ -201,29 +242,24 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void setControllerText(String text) {
-    textController.text = text;
-    textController.selection =
-        TextSelection.collapsed(offset: textController.text.length);
-
     if (widget.onTextChanged != null) {
       widget.onTextChanged!(text);
     }
+
+    textController.text = text;
+    textController.selection =
+        TextSelection.collapsed(offset: textController.text.length);
   }
 
   void onOptionSelected(Option<T> option) async {
+    setControllerText(option.label);
+
     if (widget.onOptionSelected != null) {
       widget.onOptionSelected!(option);
     }
+
     if (!isMenuControllerProvided) {
-      setControllerText(option.label);
       menuController.isExpanded = false;
-
-      await Future.delayed(
-        widget.menuDecoration?.animationDuration ??
-            const Duration(milliseconds: 350),
-      );
-
-      focusNode.unfocus();
     }
   }
 
@@ -231,16 +267,10 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     if (widget.onTapOutside != null) {
       widget.onTapOutside!();
     }
+
     if (!isMenuControllerProvided) {
       if (menuController.isExpanded) {
         menuController.isExpanded = false;
-        await Future.delayed(
-          widget.menuDecoration?.animationDuration ??
-              const Duration(milliseconds: 350),
-        );
-      }
-      if (focusNode.hasFocus) {
-        focusNode.unfocus();
       }
     }
   }
@@ -249,16 +279,9 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     if (widget.onTap != null) {
       widget.onTap!();
     }
+
     if (!isMenuControllerProvided) {
-      final isExpanded = menuController.isExpanded;
       menuController.isExpanded = !menuController.isExpanded;
-
-      if (isExpanded) {
-        await Future.delayed(widget.menuDecoration?.animationDuration ??
-            const Duration(milliseconds: 350));
-
-        focusNode.unfocus();
-      }
     }
   }
 
@@ -278,8 +301,14 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
       initOverlay();
     });
 
-    menuController.addListener(() {
+    menuController.addListener(() async {
       setState(() {});
+
+      if (!menuController.isExpanded && focusNode.hasFocus) {
+        await Future.delayed(widget.menuDecoration?.animationDuration ??
+            const Duration(milliseconds: 350));
+        focusNode.unfocus();
+      }
     });
   }
 

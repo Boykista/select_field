@@ -38,7 +38,6 @@ class OptionsMenu<T> extends StatefulWidget {
 class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
   bool isOverlayAbove = false;
   Option<T>? selectedOption;
-  bool hideBoxDecoration = true;
 
   double get overlayHeight {
     if (!widget.menuController.isExpanded) {
@@ -75,6 +74,7 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
   void onOptionSelected(Option<T> option) {
     selectedOption = option;
     widget.onOptionSelected(option);
+    setState(() {});
   }
 
   void initSetup() {
@@ -83,10 +83,6 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
     }
 
     isOverlayAbove = widget.position == MenuPosition.above;
-
-    if (widget.menuController.isExpanded) {
-      hideBoxDecoration = false;
-    }
   }
 
   @override
@@ -98,9 +94,6 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
     widget.menuController.addListener(() {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         if (mounted) {
-          if (widget.menuController.isExpanded) {
-            hideBoxDecoration = false;
-          }
           setState(() {});
         }
       });
@@ -123,28 +116,19 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
             margin: widget.decoration?.margin,
             duration: widget.decoration?.animationDuration ??
                 const Duration(milliseconds: 350),
-            onEnd: () {
-              if (!widget.menuController.isExpanded) {
-                setState(() {
-                  hideBoxDecoration = true;
-                });
-              }
-            },
-            clipBehavior: !hideBoxDecoration ? Clip.hardEdge : Clip.none,
             height: overlayHeight,
-            decoration: !hideBoxDecoration
-                ? widget.decoration?.backgroundDecoration ??
-                    BoxDecoration(
-                      color: Theme.of(context).inputDecorationTheme.fillColor,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(context).colorScheme.shadow,
-                          offset: Offset(0, isOverlayAbove ? -1 : 1),
-                        )
-                      ],
+            decoration: widget.decoration?.backgroundDecoration ??
+                BoxDecoration(
+                  color: Theme.of(context).inputDecorationTheme.fillColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).colorScheme.shadow,
+                      offset: Offset(0, isOverlayAbove ? -1 : 1),
                     )
-                : null,
+                  ],
+                ),
+            clipBehavior: Clip.hardEdge,
             child: ListView.separated(
               reverse: isOverlayAbove,
               shrinkWrap: true,

@@ -142,12 +142,13 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
 
   void setControllerText() {
     if (widget.fieldText != null) {
-      return;
+      textController.text = widget.fieldText!;
+    } else {
+      final options =
+          menuController.selectedOptions.map((option) => option.label);
+      final text = options.join(widget.separatorChar);
+      textController.text = text;
     }
-    final options =
-        menuController.selectedOptions.map((option) => option.label);
-    final text = options.join(widget.separatorChar);
-    textController.text = text;
   }
 
   void onOptionSelected(Option<T> option) {
@@ -159,8 +160,8 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     if (widget.onOptionsSelected != null) {
       widget.onOptionsSelected!(selectedOptions);
     }
-    setControllerText();
     menuController.selectedOptions = selectedOptions;
+    setControllerText();
   }
 
   void handleOnTap() async {
@@ -202,7 +203,6 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     focusNode = widget.focusNode ?? FocusNode();
     textController =
         widget.textController ?? TextEditingController(text: widget.fieldText);
-
     menuController = widget.menuController ?? MultiSelectFieldMenuController();
 
     if (widget.initialOptions != null) {
