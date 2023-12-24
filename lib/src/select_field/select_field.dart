@@ -173,6 +173,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   late final FocusNode focusNode;
   LayerLink layerLink = LayerLink();
   late final SelectFieldMenuController<T> menuController;
+  late final bool isMenuControllerProvided;
 
   void initOverlay() {
     final renderBox = context.findRenderObject() as RenderBox;
@@ -210,12 +211,10 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void onOptionSelected(Option<T> option) async {
-    if (menuController.customControl?.onOptionSelected != null) {
-      menuController.customControl!.onOptionSelected!(option);
-    } else {
-      if (widget.onOptionSelected != null) {
-        widget.onOptionSelected!(option);
-      }
+    if (widget.onOptionSelected != null) {
+      widget.onOptionSelected!(option);
+    }
+    if (!isMenuControllerProvided) {
       setControllerText(option.label);
       menuController.isExpanded = false;
 
@@ -229,12 +228,10 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void handleOnTapOutside() async {
-    if (menuController.customControl?.onTapOutside != null) {
-      menuController.customControl!.onTapOutside!();
-    } else {
-      if (widget.onTapOutside != null) {
-        widget.onTapOutside!();
-      }
+    if (widget.onTapOutside != null) {
+      widget.onTapOutside!();
+    }
+    if (!isMenuControllerProvided) {
       if (menuController.isExpanded) {
         menuController.isExpanded = false;
         await Future.delayed(
@@ -249,12 +246,10 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void handleOnTap() async {
-    if (menuController.customControl?.onTap != null) {
-      menuController.customControl!.onTap!();
-    } else {
-      if (widget.onTap != null) {
-        widget.onTap!();
-      }
+    if (widget.onTap != null) {
+      widget.onTap!();
+    }
+    if (!isMenuControllerProvided) {
       final isExpanded = menuController.isExpanded;
       menuController.isExpanded = !menuController.isExpanded;
 
@@ -273,6 +268,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     focusNode = widget.focusNode ?? FocusNode();
     textController = widget.textController ?? TextEditingController();
     menuController = widget.menuController ?? SelectFieldMenuController();
+    isMenuControllerProvided = widget.menuController != null;
 
     if (widget.initialOption != null) {
       setControllerText(widget.initialOption!.label);

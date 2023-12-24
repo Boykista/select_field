@@ -1,6 +1,8 @@
 import 'package:example/data.dart';
 import 'package:example/multi_select_field_examples/multi_select_field_demo.dart';
 import 'package:example/multi_select_field_examples/multi_select_options_control.dart';
+import 'package:example/select_field_examples/custom_menu_select_field.dart';
+import 'package:example/select_field_examples/styled_select_field.dart';
 import 'package:flutter/material.dart';
 import 'package:select_field/select_field.dart';
 
@@ -69,8 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // ),
             // CustomMenuSelectField(options: options),
             // const SizedBox(height: 32),
-            // MultiSelectOptionsControl<String>(options: options),
-            MultiSelectFieldDemo<String>(options: options)
+            MultiSelectOptionsControl<String>(options: options),
+            // MultiSelectFieldDemo<String>(options: options)
           ],
         ),
       ),

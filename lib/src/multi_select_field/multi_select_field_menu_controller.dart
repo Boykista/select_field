@@ -5,10 +5,7 @@ class MultiSelectFieldMenuController<T> extends SelectFieldMenuController<T> {
   late ValueNotifier<bool> _notifier;
   late ValueNotifier<List<Option<T>>> _selectedOptionsNotifier;
 
-  MultiSelectFieldMenuController({
-    bool isExpanded = false,
-    super.customControl,
-  }) {
+  MultiSelectFieldMenuController({bool isExpanded = false}) {
     _notifier = ValueNotifier(isExpanded);
     _selectedOptionsNotifier = ValueNotifier([]);
   }

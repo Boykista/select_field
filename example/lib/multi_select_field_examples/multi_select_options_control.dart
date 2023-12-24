@@ -17,7 +17,7 @@ class MultiSelectOptionsControl<String> extends StatefulWidget {
 class _MultiSelectOptionsControlState<String>
     extends State<MultiSelectOptionsControl<String>> {
   late final List<Option<String>> initalOptions;
-  late final MultiSelectCustomControl<String> customControl;
+  late final MultiSelectFieldMenuController<String> customControl;
 
   void onOptionSelected(List<Option<String>> options) {
     setState(() {
@@ -26,8 +26,10 @@ class _MultiSelectOptionsControlState<String>
   }
 
   void onOptionRemoved(Option<String> option) {
+    final options = customControl.selectedOptions;
+    options.remove(option);
     setState(() {
-      customControl.selectedOptions.remove(option);
+      customControl.selectedOptions = options;
     });
   }
 
@@ -35,7 +37,7 @@ class _MultiSelectOptionsControlState<String>
   void initState() {
     super.initState();
     initalOptions = widget.options.sublist(1, 3);
-    customControl = MultiSelectCustomControl(selectedOptions: initalOptions);
+    customControl = MultiSelectFieldMenuController(isExpanded: true);
   }
 
   @override
@@ -47,7 +49,7 @@ class _MultiSelectOptionsControlState<String>
           initialOptions: initalOptions,
           fieldText: 'Select fruit',
           onOptionsSelected: onOptionSelected,
-          customControl: customControl,
+          menuController: customControl,
           menuDecoration: MenuDecoration(
             childBuilder: (context, option) {
               return Row(
