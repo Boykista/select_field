@@ -7,10 +7,10 @@ class MultiSelectFieldMenuController<T> extends SelectFieldMenuController<T> {
 
   MultiSelectFieldMenuController({
     bool isExpanded = false,
-    List<Option<T>> initalOptions = const [],
+    List<Option<T>>? initalOptions,
   }) {
     _notifier = ValueNotifier(isExpanded);
-    _selectedOptionsNotifier = ValueNotifier(initalOptions);
+    _selectedOptionsNotifier = ValueNotifier(initalOptions ?? <Option<T>>[]);
   }
 
   @override
