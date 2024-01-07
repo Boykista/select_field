@@ -282,17 +282,10 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       validator: widget.validator,
       prefixIconBuilder: widget.prefixIconBuilder,
       suffixIconBuilder: widget.suffixIconBuilder,
-      optionBuilder: widget.optionBuilder != null
-          ? (context, option, onOptionSelected) => widget.optionBuilder!(
-                context,
-                option,
-                menuController.selectedOptions.contains(option),
-                onOptionSelected,
-              )
-          : null,
+      optionBuilder: widget.optionBuilder,
       menuDecoration: widget.menuDecoration ??
           MenuDecoration(
-            childBuilder: (context, option) {
+            childBuilder: (context, option, isSelected) {
               return Row(
                 children: [
                   Expanded(
@@ -311,7 +304,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (menuController.selectedOptions.contains(option))
+                  if (isSelected)
                     Icon(
                       Icons.check_circle_outline_rounded,
                       color: Theme.of(context)
@@ -319,7 +312,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                           .style
                           ?.foregroundColor
                           ?.resolve({}),
-                    )
+                    ),
                 ],
               );
             },

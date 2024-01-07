@@ -101,6 +101,7 @@ class SelectField<T> extends StatefulWidget {
   final Widget Function(
     BuildContext context,
     Option<T> option,
+    bool isSelected,
     void Function(Option<T> option) onOptionSelected,
   )? optionBuilder;
 
@@ -183,7 +184,6 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         child: OptionsMenu<T>(
           link: layerLink,
           options: widget.options,
-          initialOption: widget.initialOption,
           textController: textController,
           position: widget.menuPosition,
           onOptionSelected: onOptionSelected,
@@ -208,6 +208,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void onOptionSelected(Option<T> option) async {
+    menuController.selectedOption = option;
     setControllerText(option.label);
 
     if (widget.onOptionSelected != null) {
@@ -250,6 +251,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     isMenuControllerProvided = widget.menuController != null;
 
     if (widget.initialOption != null) {
+      menuController.selectedOption = widget.initialOption;
       setControllerText(widget.initialOption!.label);
     }
 

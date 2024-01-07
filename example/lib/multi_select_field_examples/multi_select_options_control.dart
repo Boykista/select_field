@@ -53,7 +53,7 @@ class _MultiSelectOptionsControlState<String>
           onOptionsSelected: onOptionSelected,
           menuController: menuController,
           menuDecoration: MenuDecoration(
-            childBuilder: (context, option) {
+            childBuilder: (context, option, isSelected) {
               return Row(
                 children: [
                   Expanded(
@@ -73,7 +73,7 @@ class _MultiSelectOptionsControlState<String>
                     ),
                   ),
                   Icon(
-                    menuController.selectedOptions.contains(option)
+                    isSelected
                         ? Icons.check_box_outlined
                         : Icons.check_box_outline_blank_outlined,
                     color: Theme.of(context)

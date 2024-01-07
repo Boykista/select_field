@@ -35,7 +35,8 @@ class MenuDecoration<T> {
   final Widget Function(BuildContext context, int index)? separatorBuilder;
 
   /// Specifies `child` widget of a default `TextButton` menu option widget.
-  final Widget Function(BuildContext context, Option<T> option)? childBuilder;
+  final Widget Function(
+      BuildContext context, Option<T> option, bool isSelected)? childBuilder;
 
   MenuDecoration({
     this.margin,

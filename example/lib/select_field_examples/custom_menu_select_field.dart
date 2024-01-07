@@ -16,7 +16,6 @@ class CustomMenuSelectField<String> extends StatefulWidget {
 
 class _CustomMenuSelectFieldState<String>
     extends State<CustomMenuSelectField<String>> {
-  Option<String>? selectedOption;
   final SelectFieldMenuController<String> menuController =
       SelectFieldMenuController();
 
@@ -57,13 +56,12 @@ class _CustomMenuSelectFieldState<String>
       onTapOutside: handleOnTapOutside,
       onOptionSelected: handleOnOptionSelected,
       menuPosition: MenuPosition.below,
-      optionBuilder: (context, option, onOptionSelected) {
+      optionBuilder: (context, option, isSelected, onOptionSelected) {
         return GestureDetector(
           onTap: () {
             onOptionSelected(option);
-            selectedOption = option;
           },
-          child: selectedOption == option
+          child: isSelected
               ? Container(
                   height: 60,
                   color: Colors.deepOrange.withOpacity(0.2),

@@ -95,12 +95,12 @@ You can also call optionBuilder function to add your own widgets in dropdown men
 ```dart
 SelectField<String>(
       options: options,
-      optionBuilder: (context, option, onOptionSelected) {
+      optionBuilder: (context, option, isSelected, onOptionSelected) {
         return GestureDetector(
             // You have to call this function if menu's
             // default behaviour is needed (expanded or collapsed)
             onTap: () => onOptionSelected(option),
-            child: selectedOption == option
+            child: isSelected
                 ? Container(
                     height: 60,
                     color: Colors.deepOrange.withOpacity(0.2),
@@ -184,7 +184,7 @@ class _MultiSelectOptionsControlState<String>
           onOptionsSelected: onOptionSelected,
           menuController: menuController,
           menuDecoration: MenuDecoration(
-            childBuilder: (context, option) {
+            childBuilder: (context, option, isSelected) {
               return Row(
                 children: [
                   Expanded(
@@ -204,7 +204,7 @@ class _MultiSelectOptionsControlState<String>
                     ),
                   ),
                   Icon(
-                    menuController.selectedOptions.contains(option)
+                    isSelected
                         ? Icons.check_box_outlined
                         : Icons.check_box_outline_blank_outlined,
                     color: Theme.of(context)

@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:select_field/src/option.dart';
-import 'package:select_field/src/menu_decoration.dart';
-import 'package:select_field/src/select_field/select_field_menu_controller.dart';
+import 'package:select_field/select_field.dart';
 
 class OptionsMenu<T> extends StatefulWidget {
   final LayerLink link;
   final List<Option<T>> options;
-  final Option<T>? initialOption;
   final TextEditingController textController;
   final MenuPosition position;
   final void Function(Option<T> option) onOptionSelected;
   final MenuDecoration<T>? decoration;
-  final SelectFieldMenuController menuController;
+  final SelectFieldMenuController<T> menuController;
   final Widget Function(
     BuildContext context,
     Option<T> option,
+    bool isSelected,
     void Function(Option<T> option) onItemPressed,
   )? builder;
 
@@ -22,7 +20,6 @@ class OptionsMenu<T> extends StatefulWidget {
     Key? key,
     required this.link,
     required this.options,
-    required this.initialOption,
     required this.textController,
     required this.position,
     required this.onOptionSelected,
@@ -37,7 +34,6 @@ class OptionsMenu<T> extends StatefulWidget {
 
 class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
   bool isOverlayAbove = false;
-  Option<T>? selectedOption;
 
   double get overlayHeight {
     if (!widget.menuController.isExpanded) {
@@ -71,25 +67,27 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
     };
   }
 
-  void onOptionSelected(Option<T> option) {
-    selectedOption = option;
-    widget.onOptionSelected(option);
-    setState(() {});
-  }
+  bool isOptionSelected(Option<T> option) {
+    bool isSelected = option == widget.menuController.selectedOption;
 
-  void initSetup() {
-    if (widget.initialOption != null) {
-      selectedOption = widget.initialOption;
+    if (widget.menuController is MultiSelectFieldMenuController) {
+      final controller =
+          widget.menuController as MultiSelectFieldMenuController;
+      isSelected = controller.selectedOptions.contains(option);
     }
 
-    isOverlayAbove = widget.position == MenuPosition.above;
+    return isSelected;
+  }
+
+  void onOptionSelected(Option<T> option) {
+    widget.onOptionSelected(option);
   }
 
   @override
   void initState() {
     super.initState();
 
-    initSetup();
+    isOverlayAbove = widget.position == MenuPosition.above;
 
     widget.menuController.addListener(() {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -136,10 +134,11 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
                 final option = widget.options[index];
-                final isSelected = option == selectedOption;
+                final isSelected = isOptionSelected(option);
 
                 if (widget.builder != null) {
-                  return widget.builder!(context, option, onOptionSelected);
+                  return widget.builder!(
+                      context, option, isSelected, onOptionSelected);
                 }
 
                 return TextButton(
@@ -154,7 +153,8 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
                         shape: const RoundedRectangleBorder(),
                       ),
                   child: widget.decoration?.childBuilder != null
-                      ? widget.decoration!.childBuilder!(context, option)
+                      ? widget.decoration!.childBuilder!(
+                          context, option, isSelected)
                       : Row(
                           children: [
                             Expanded(
