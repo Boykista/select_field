@@ -292,7 +292,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
           : null,
       menuDecoration: widget.menuDecoration ??
           MenuDecoration(
-            childBuilder: (context, option, [isSelected]) {
+            childBuilder: (context, option) {
               return Row(
                 children: [
                   Expanded(
@@ -311,7 +311,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  if (isSelected != null && isSelected)
+                  if (menuController.selectedOptions.contains(option))
                     Icon(
                       Icons.check_circle_outline_rounded,
                       color: Theme.of(context)
