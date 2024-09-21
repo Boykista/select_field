@@ -1,6 +1,7 @@
 import 'package:example/data.dart';
 import 'package:example/multi_select_field_examples/multi_select_field_demo.dart';
 import 'package:example/multi_select_field_examples/multi_select_options_control.dart';
+import 'package:example/search_select_field/search_select_field.dart';
 import 'package:example/select_field_examples/custom_menu_select_field.dart';
 import 'package:example/select_field_examples/styled_select_field.dart';
 import 'package:flutter/material.dart';
@@ -53,13 +54,14 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            StyledSelectField(options: options),
-            const SizedBox(height: 32),
-            CustomMenuSelectField(options: options),
-            const SizedBox(height: 32),
-            MultiSelectOptionsControl<String>(options: options),
-            const SizedBox(height: 32),
-            MultiSelectFieldDemo<String>(options: options)
+            // StyledSelectField(options: options),
+            // const SizedBox(height: 32),
+            // CustomMenuSelectField(options: options),
+            // const SizedBox(height: 32),
+            // MultiSelectOptionsControl<String>(options: options),
+            // const SizedBox(height: 32),
+            // MultiSelectFieldDemo<String>(options: options)
+            SearchSelectField(options: options),
           ],
         ),
       ),

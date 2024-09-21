@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:select_field/src/option.dart';
 import 'package:select_field/src/menu_decoration.dart';
 import 'package:select_field/src/options_menu.dart';
+import 'package:select_field/src/search_options.dart';
 import 'package:select_field/src/select_field/select_field_menu_controller.dart';
 
 typedef IconBuilder = Widget Function(BuildContext context, bool isExpanded);
@@ -105,6 +106,9 @@ class SelectField<T> extends StatefulWidget {
     void Function(Option<T> option) onOptionSelected,
   )? optionBuilder;
 
+  /// Search is enabled by providing search options. Note that options height is now fixed to a provided value.
+  final SearchOptions? searchOptions;
+
   /// Restoration ID to save and restore the state of the form field.
   final String? restorationId;
 
@@ -151,6 +155,7 @@ class SelectField<T> extends StatefulWidget {
     this.prefixIconBuilder,
     this.suffixIconBuilder,
     this.optionBuilder,
+    this.searchOptions,
     this.restorationId,
     this.strutStyle,
     this.textDirection,
@@ -189,6 +194,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
           onOptionSelected: onOptionSelected,
           decoration: widget.menuDecoration,
           menuController: menuController,
+          searchOptions: widget.searchOptions,
           builder: widget.optionBuilder,
         ),
       ),
@@ -295,7 +301,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         onTapOutside: (event) => handleOnTapOutside(),
         child: TextFormField(
           controller: textController,
-          readOnly: true,
+          readOnly: widget.searchOptions == null,
           focusNode: focusNode,
           onChanged: widget.onTextChanged,
           onTap: handleOnTap,
