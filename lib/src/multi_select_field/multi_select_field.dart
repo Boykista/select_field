@@ -112,6 +112,9 @@ class MultiSelectField<T> extends StatefulWidget {
     void Function(Option<T> option) onOptionSelected,
   )? optionBuilder;
 
+  /// Search is enabled by providing search options. Note that options height is now fixed to a provided value.
+  final SearchOptions<T>? searchOptions;
+
   /// Restoration ID to save and restore the state of the form field.
   final String? restorationId;
 
@@ -145,6 +148,7 @@ class MultiSelectField<T> extends StatefulWidget {
     this.fieldText,
     this.onTextChanged,
     this.onOptionsSelected,
+    this.menuController,
     this.textController,
     this.focusNode,
     this.onTap,
@@ -159,6 +163,7 @@ class MultiSelectField<T> extends StatefulWidget {
     this.suffixIconBuilder,
     this.prefixIconBuilder,
     this.optionBuilder,
+    this.searchOptions,
     this.restorationId,
     this.strutStyle,
     this.textDirection,
@@ -167,7 +172,6 @@ class MultiSelectField<T> extends StatefulWidget {
     this.enabled,
     this.onSaved,
     this.validator,
-    this.menuController,
   });
 
   @override
@@ -178,9 +182,12 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
   late final TextEditingController textController;
   late final MultiSelectFieldMenuController<T> menuController;
   late final FocusNode focusNode;
+  late final bool searchEnabled;
 
-  void setControllerText() {
-    if (widget.fieldText != null) {
+  void setControllerText([String? value]) {
+    if (value != null) {
+      textController.text = value;
+    } else if (widget.fieldText != null) {
       textController.text = widget.fieldText!;
     } else {
       final options =
@@ -200,13 +207,16 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       widget.onOptionsSelected!(selectedOptions);
     }
     menuController.selectedOptions = selectedOptions;
-    setControllerText();
+    if (!searchEnabled) {
+      setControllerText();
+    }
   }
 
   void handleOnTap() async {
     if (widget.onTap != null) {
       widget.onTap!();
     }
+    setControllerText('');
     menuController.isExpanded = !menuController.isExpanded;
   }
 
@@ -227,14 +237,20 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     textController =
         widget.textController ?? TextEditingController(text: widget.fieldText);
     menuController = widget.menuController ?? MultiSelectFieldMenuController();
+    searchEnabled = widget.searchOptions != null;
 
     if (widget.initialOptions != null) {
       menuController.selectedOptions = widget.initialOptions!;
-      setControllerText();
+      if (!searchEnabled) {
+        setControllerText();
+      }
     }
 
     menuController.addListener(() async {
       if (!menuController.isExpanded && focusNode.hasFocus) {
+        if (searchEnabled && widget.fieldText != null) {
+          setControllerText();
+        }
         await Future.delayed(widget.menuDecoration?.animationDuration ??
             const Duration(milliseconds: 350));
         focusNode.unfocus();
@@ -270,6 +286,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       focusNode: focusNode,
       onTap: handleOnTap,
       inputDecoration: widget.inputDecoration,
+      searchOptions: widget.searchOptions,
       restorationId: widget.restorationId,
       inputStyle: widget.inputStyle,
       textAlign: widget.textAlign,

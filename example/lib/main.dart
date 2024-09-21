@@ -1,6 +1,7 @@
 import 'package:example/data.dart';
 import 'package:example/multi_select_field_examples/multi_select_field_demo.dart';
 import 'package:example/multi_select_field_examples/multi_select_options_control.dart';
+import 'package:example/search_multi_select_field/search_multi_select_field.dart';
 import 'package:example/search_select_field/search_select_field.dart';
 import 'package:example/select_field_examples/custom_menu_select_field.dart';
 import 'package:example/select_field_examples/styled_select_field.dart';
@@ -61,7 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
             // MultiSelectOptionsControl<String>(options: options),
             // const SizedBox(height: 32),
             // MultiSelectFieldDemo<String>(options: options)
-            SearchSelectField(options: options),
+            // SearchSelectField(options: options),
+            SearchMultiSelectField(options: options),
           ],
         ),
       ),

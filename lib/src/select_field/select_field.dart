@@ -107,7 +107,7 @@ class SelectField<T> extends StatefulWidget {
   )? optionBuilder;
 
   /// Search is enabled by providing search options. Note that options height is now fixed to a provided value.
-  final SearchOptions? searchOptions;
+  final SearchOptions<T>? searchOptions;
 
   /// Restoration ID to save and restore the state of the form field.
   final String? restorationId;
@@ -177,6 +177,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   LayerLink layerLink = LayerLink();
   late final SelectFieldMenuController<T> menuController;
   late final bool isMenuControllerProvided;
+  late final bool isTextControllerProvided;
 
   void initOverlay() {
     final renderBox = context.findRenderObject() as RenderBox;
@@ -221,7 +222,9 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
       menuController.selectedOption = null;
     } else {
       menuController.selectedOption = option;
-      setControllerText(option.label);
+      if (!isTextControllerProvided) {
+        setControllerText(option.label);
+      }
     }
 
     if (widget.onOptionSelected != null) {
@@ -262,6 +265,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     textController = widget.textController ?? TextEditingController();
     menuController = widget.menuController ?? SelectFieldMenuController();
     isMenuControllerProvided = widget.menuController != null;
+    isTextControllerProvided = widget.textController != null;
 
     if (widget.initialOption != null) {
       menuController.selectedOption = widget.initialOption;
@@ -282,7 +286,8 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
       }
       if (!isMenuControllerProvided &&
           !menuController.isExpanded &&
-          menuController.selectedOption != null) {
+          menuController.selectedOption != null &&
+          !isTextControllerProvided) {
         setControllerText(menuController.selectedOption!.label);
       }
     });
