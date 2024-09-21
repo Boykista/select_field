@@ -1,3 +1,9 @@
+## 2.0.0
+
+- Search options on `SelectField()` and `MultiSelectField()` added
+- Auto diselect when tapped on same option on `SelectField()` added
+- If `TextEditingController()` is provided, you are responsible for handling input field text
+
 ## 1.1.0
 
 - Fixed Type error bug on `MultiSelectField()` when initial options were null

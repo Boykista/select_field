@@ -9,6 +9,7 @@ With Select Field and Multi Select Field, you can:
 - Customize the input field and dropdown menu to your preferences.
 - Create custom widgets for the dropdown menu.
 - Control menu's behaviour.
+- Search through provided options.
 
 ## Limitations
 
