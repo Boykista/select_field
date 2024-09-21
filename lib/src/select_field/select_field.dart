@@ -214,14 +214,21 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void onOptionSelected(Option<T> option) async {
-    menuController.selectedOption = option;
-    setControllerText(option.label);
+    final currentOption = menuController.selectedOption;
+    final shouldDiselectOption = currentOption == option;
+
+    if (shouldDiselectOption) {
+      menuController.selectedOption = null;
+    } else {
+      menuController.selectedOption = option;
+      setControllerText(option.label);
+    }
 
     if (widget.onOptionSelected != null) {
       widget.onOptionSelected!(option);
     }
 
-    if (!isMenuControllerProvided) {
+    if (!isMenuControllerProvided && !shouldDiselectOption) {
       menuController.isExpanded = false;
     }
   }
