@@ -273,6 +273,11 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
             const Duration(milliseconds: 350));
         focusNode.unfocus();
       }
+      if (!isMenuControllerProvided &&
+          !menuController.isExpanded &&
+          menuController.selectedOption != null) {
+        setControllerText(menuController.selectedOption!.label);
+      }
     });
   }
 

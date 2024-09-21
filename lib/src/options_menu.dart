@@ -100,17 +100,16 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
   }
 
   List<Option<T>> filteredOptions() {
-    final query = widget.textController.text.toLowerCase();
+    final query = widget.textController.text;
 
-    final filtered = widget.options
-        .where((option) => option.label.toLowerCase().contains(query))
-        .toList();
-
-    if (filtered.first.label.toLowerCase() == query) {
-      if (query != selectedOption?.label.toLowerCase()) {
-        onOptionSelected(filtered.first);
+    final filtered = widget.options.where((option) {
+      final filter = widget.searchOptions!.filterBy;
+      if (filter != null) {
+        return filter(option, query);
       }
-    }
+
+      return option.label.toLowerCase().contains(query.toLowerCase());
+    }).toList();
 
     return filtered;
   }

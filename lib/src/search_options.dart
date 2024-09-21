@@ -1,19 +1,17 @@
-class SearchOptions {
+import 'package:select_field/select_field.dart';
+
+class SearchOptions<T> {
   /// Height for the every option widget is fixed
   final double height;
 
-  /// Prefer [SearchBy.label] because it is a string.
-  /// If you use [SearchBy.value], value is converted to string, and it is not
-  /// as effective
-  final SearchBy searchBy;
+  /// The default filtering function is:
+  /// ```dart
+  /// (option, query) => option.label.toLowerCase().contains(query.toLowerCase());
+  /// ```
+  final bool Function(Option<T> option, String query)? filterBy;
 
   SearchOptions({
     this.height = 60,
-    this.searchBy = SearchBy.label,
+    this.filterBy,
   });
-}
-
-enum SearchBy {
-  label,
-  value,
 }
