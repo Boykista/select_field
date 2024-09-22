@@ -15,6 +15,7 @@ With `SelectField()` and `MultiSelectField()`, you can:
 
 - Custom animation of a dropdown menu is not supported.
 - If you provide your own menu controller or text controller, you are responsible for managing their behavior.
+- By providing search options, height of every menu option is fixed
 
 ## Example
 

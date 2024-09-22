@@ -1,7 +1,7 @@
 import 'package:select_field/select_field.dart';
 
 class SearchOptions<T> {
-  /// Height for the every option widget is fixed
+  /// Height is fixed for every option widget
   final double height;
 
   /// The default filtering function is:
