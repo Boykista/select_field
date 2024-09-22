@@ -1,8 +1,7 @@
 ## 2.0.0
 
-- Search options on `SelectField()` and `MultiSelectField()` added
-- Auto diselect when tapped on same option on `SelectField()` added
-- If `TextEditingController()` is provided, you are responsible for handling input field text
+- Added search functionality to `SelectField()` and `MultiSelectField()`
+- Implemented auto-unselect when tapping the same option in `SelectField()`
 
 ## 1.1.0
 

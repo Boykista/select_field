@@ -1,8 +1,8 @@
 import 'package:example/data.dart';
 import 'package:example/multi_select_field_examples/multi_select_field_demo.dart';
 import 'package:example/multi_select_field_examples/multi_select_options_control.dart';
-import 'package:example/search_multi_select_field/search_multi_select_field.dart';
-import 'package:example/search_select_field/search_select_field.dart';
+import 'package:example/multi_select_field_examples/search_multi_select_field.dart';
+import 'package:example/select_field_examples/search_select_field.dart';
 import 'package:example/select_field_examples/custom_menu_select_field.dart';
 import 'package:example/select_field_examples/styled_select_field.dart';
 import 'package:flutter/material.dart';
