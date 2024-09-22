@@ -33,6 +33,14 @@ class _MultiSelectOptionsControlState<String>
     });
   }
 
+  void onTapOutside() {
+    menuController.isExpanded = false;
+  }
+
+  void onTap() {
+    menuController.isExpanded = !menuController.isExpanded;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -44,12 +52,20 @@ class _MultiSelectOptionsControlState<String>
   }
 
   @override
+  void dispose() {
+    menuController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         MultiSelectField<String>(
           options: widget.options,
           fieldText: 'Select fruit',
+          onTap: onTap,
+          onTapOutside: onTapOutside,
           onOptionsSelected: onOptionSelected,
           menuController: menuController,
           menuDecoration: MenuDecoration(

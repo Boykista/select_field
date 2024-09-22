@@ -13,7 +13,7 @@ final ThemeData themeData = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme(
     brightness: Brightness.light,
-    primary: Colors.purple[900]!,
+    primary: Colors.teal[900]!,
     onPrimary: Colors.white,
     secondary: Colors.lightGreen,
     onSecondary: Colors.white,
@@ -21,8 +21,8 @@ final ThemeData themeData = ThemeData(
     onError: Colors.black,
     background: Colors.white,
     onBackground: Colors.black,
-    surface: Colors.purple[900]!,
-    onSurface: Colors.purple,
+    surface: Colors.teal[900]!,
+    onSurface: Colors.teal,
     shadow: Colors.brown[300]!,
   ),
   textTheme: const TextTheme(
@@ -33,9 +33,9 @@ final ThemeData themeData = ThemeData(
   ),
   inputDecorationTheme: InputDecorationTheme(
     filled: true,
-    fillColor: Colors.purple[100],
-    focusColor: Colors.purple[900]!,
-    iconColor: Colors.purple[900]!,
+    fillColor: Colors.teal[100],
+    focusColor: Colors.teal[900],
+    iconColor: Colors.teal[900],
     contentPadding: const EdgeInsets.all(16),
     errorStyle: TextStyle(
       fontSize: 16,
@@ -49,7 +49,7 @@ final ThemeData themeData = ThemeData(
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.purple[300]!,
+        color: Colors.teal[300]!,
         width: 1,
       ),
       borderRadius: BorderRadius.circular(8),
@@ -60,7 +60,7 @@ final ThemeData themeData = ThemeData(
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.purple[900]!,
+        color: Colors.teal[900]!,
         width: 2,
       ),
       borderRadius: BorderRadius.circular(8),
@@ -87,9 +87,9 @@ final ThemeData themeData = ThemeData(
     ),
   ),
   textSelectionTheme: TextSelectionThemeData(
-    selectionHandleColor: Colors.purple[900]!,
-    cursorColor: Colors.purple[900]!,
-    selectionColor: Colors.purple[300],
+    selectionHandleColor: Colors.teal[900],
+    cursorColor: Colors.teal[900],
+    selectionColor: Colors.teal[300],
   ),
-  dividerColor: Colors.purple[900]!,
+  dividerColor: Colors.teal[900],
 );

@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Multi Select Field',
+          'Search and Select',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -61,8 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
             // const SizedBox(height: 32),
             // MultiSelectOptionsControl<String>(options: options),
             // const SizedBox(height: 32),
-            // MultiSelectFieldDemo<String>(options: options)
+            // MultiSelectFieldDemo<String>(options: options),
+            // const SizedBox(height: 32),
             // SearchSelectField(options: options),
+            // const SizedBox(height: 32),
             SearchMultiSelectField(options: options),
           ],
         ),
