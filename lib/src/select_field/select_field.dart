@@ -290,6 +290,17 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         focusNode.unfocus();
       }
     });
+
+    if (widget.searchOptions != null) {
+      focusNode.addListener(() {
+        if (!focusNode.hasFocus && menuController.isExpanded) {
+          menuController.isExpanded = false;
+          if (!isTextControllerProvided) {
+            setControllerText(menuController.selectedOption?.label ?? '');
+          }
+        }
+      });
+    }
   }
 
   @override

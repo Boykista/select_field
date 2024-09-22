@@ -275,6 +275,17 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
         }
       }
     });
+
+    if (widget.searchOptions != null) {
+      focusNode.addListener(() {
+        if (!focusNode.hasFocus && menuController.isExpanded) {
+          menuController.isExpanded = false;
+          if (!isTextControllerProvided) {
+            setControllerText();
+          }
+        }
+      });
+    }
   }
 
   @override
