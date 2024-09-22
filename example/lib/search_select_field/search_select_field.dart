@@ -13,6 +13,7 @@ class SearchSelectField extends StatelessWidget {
   Widget build(BuildContext context) {
     return SelectField(
       options: options,
+      hint: 'Search fruit',
       searchOptions: SearchOptions(),
     );
   }

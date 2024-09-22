@@ -17,10 +17,14 @@ class MultiSelectField<T> extends StatefulWidget {
   /// Callback for providing selected options list
   final void Function(List<Option<T>> options)? onOptionsSelected;
 
-  /// Allows controlling menu's behavior and provides selected options for custom usage
+  /// Allows controlling menu's behavior and provides selected options for custom usage.
+  ///
+  /// By providing [MultiSelectFieldMenuController] you are responsible for `menu's` behaviour.
   final MultiSelectFieldMenuController<T>? menuController;
 
   /// Specifies the [TextEditingController] for [SelectField].
+  ///
+  /// By providing [TextEditingController] you are responsible for `text` behaviour.
   final TextEditingController? textController;
 
   /// See [FocusNode]
@@ -183,6 +187,8 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
   late final MultiSelectFieldMenuController<T> menuController;
   late final FocusNode focusNode;
   late final bool searchEnabled;
+  late final bool isMenuControllerProvided;
+  late final bool isTextControllerProvided;
 
   void setControllerText([String? value]) {
     if (value != null) {
@@ -207,7 +213,7 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       widget.onOptionsSelected!(selectedOptions);
     }
     menuController.selectedOptions = selectedOptions;
-    if (!searchEnabled) {
+    if (!searchEnabled && !isTextControllerProvided) {
       setControllerText();
     }
   }
@@ -216,8 +222,14 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     if (widget.onTap != null) {
       widget.onTap!();
     }
-    setControllerText('');
-    menuController.isExpanded = !menuController.isExpanded;
+    if (searchEnabled &&
+        !menuController.isExpanded &&
+        !isTextControllerProvided) {
+      setControllerText('');
+    }
+    if (!isMenuControllerProvided) {
+      menuController.isExpanded = !menuController.isExpanded;
+    }
   }
 
   void handleOnTapOutside() async {
@@ -225,8 +237,10 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
       widget.onTapOutside!();
     }
 
-    if (menuController.isExpanded) {
-      menuController.isExpanded = false;
+    if (!isMenuControllerProvided) {
+      if (menuController.isExpanded) {
+        menuController.isExpanded = false;
+      }
     }
   }
 
@@ -237,6 +251,8 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
     textController =
         widget.textController ?? TextEditingController(text: widget.fieldText);
     menuController = widget.menuController ?? MultiSelectFieldMenuController();
+    isMenuControllerProvided = widget.menuController != null;
+    isTextControllerProvided = widget.textController != null;
     searchEnabled = widget.searchOptions != null;
 
     if (widget.initialOptions != null) {
@@ -248,12 +264,15 @@ class _MultiSelectFieldState<T> extends State<MultiSelectField<T>> {
 
     menuController.addListener(() async {
       if (!menuController.isExpanded && focusNode.hasFocus) {
-        if (searchEnabled && widget.fieldText != null) {
-          setControllerText();
-        }
         await Future.delayed(widget.menuDecoration?.animationDuration ??
             const Duration(milliseconds: 350));
         focusNode.unfocus();
+
+        if (searchEnabled &&
+            widget.fieldText != null &&
+            !isTextControllerProvided) {
+          setControllerText();
+        }
       }
     });
   }
