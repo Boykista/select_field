@@ -1,3 +1,8 @@
+## 2.0.0
+
+- Added search functionality to `SelectField()` and `MultiSelectField()`
+- Implemented auto-unselect when tapping the same option in `SelectField()`
+
 ## 1.1.0
 
 - Fixed Type error bug on `MultiSelectField()` when initial options were null

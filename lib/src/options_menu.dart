@@ -9,6 +9,7 @@ class OptionsMenu<T> extends StatefulWidget {
   final void Function(Option<T> option) onOptionSelected;
   final MenuDecoration<T>? decoration;
   final SelectFieldMenuController<T> menuController;
+  final SearchOptions? searchOptions;
   final Widget Function(
     BuildContext context,
     Option<T> option,
@@ -25,6 +26,7 @@ class OptionsMenu<T> extends StatefulWidget {
     required this.onOptionSelected,
     required this.decoration,
     required this.menuController,
+    required this.searchOptions,
     required this.builder,
   }) : super(key: key);
 
@@ -33,13 +35,26 @@ class OptionsMenu<T> extends StatefulWidget {
 }
 
 class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
+  Option<T>? selectedOption;
+  List<Option<T>> searchedOptions = [];
   bool isOverlayAbove = false;
+  bool searchEnabled = false;
 
   double get overlayHeight {
     if (!widget.menuController.isExpanded) {
       return 0;
     }
-    return widget.decoration?.height ?? 365;
+
+    final menuOverallHeight = widget.decoration?.height ?? 365;
+
+    if (searchEnabled) {
+      final optionsHeight = widget.searchOptions!.height;
+      final newHeight = searchedOptions.length * optionsHeight;
+
+      return newHeight > menuOverallHeight ? menuOverallHeight : newHeight;
+    }
+
+    return menuOverallHeight;
   }
 
   Offset get displayOffset {
@@ -80,12 +95,32 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
   }
 
   void onOptionSelected(Option<T> option) {
+    selectedOption = option;
     widget.onOptionSelected(option);
+  }
+
+  List<Option<T>> filteredOptions() {
+    final query = widget.textController.text;
+
+    final filtered = widget.options.where((option) {
+      final filter = widget.searchOptions!.filterBy;
+      if (filter != null) {
+        return filter(option, query);
+      }
+
+      return option.label.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    return filtered;
   }
 
   @override
   void initState() {
     super.initState();
+    searchEnabled = widget.searchOptions != null;
+    if (searchEnabled) {
+      searchedOptions = filteredOptions();
+    }
 
     isOverlayAbove = widget.position == MenuPosition.above;
 
@@ -96,6 +131,16 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
         }
       });
     });
+
+    if (searchEnabled) {
+      widget.textController.addListener(() {
+        if (mounted) {
+          setState(() {
+            searchedOptions = filteredOptions();
+          });
+        }
+      });
+    }
   }
 
   @override
@@ -130,22 +175,36 @@ class _OptionsMenuState<T> extends State<OptionsMenu<T>> {
             child: ListView.separated(
               reverse: isOverlayAbove,
               shrinkWrap: true,
-              itemCount: widget.options.length,
+              itemCount: searchEnabled
+                  ? searchedOptions.length
+                  : widget.options.length,
               padding: EdgeInsets.zero,
               itemBuilder: (context, index) {
-                final option = widget.options[index];
+                final option = searchEnabled
+                    ? searchedOptions[index]
+                    : widget.options[index];
                 final isSelected = isOptionSelected(option);
 
                 if (widget.builder != null) {
-                  return widget.builder!(
+                  final builder = widget.builder!(
                       context, option, isSelected, onOptionSelected);
+
+                  return searchEnabled
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxHeight: widget.searchOptions!.height,
+                          ),
+                          child: builder,
+                        )
+                      : builder;
                 }
 
                 return TextButton(
                   onPressed: () => onOptionSelected(option),
                   style: widget.decoration?.buttonStyle ??
                       TextButton.styleFrom(
-                        fixedSize: const Size(double.infinity, 60),
+                        fixedSize: Size(double.infinity,
+                            searchEnabled ? widget.searchOptions!.height : 60),
                         backgroundColor:
                             Theme.of(context).inputDecorationTheme.fillColor,
                         alignment: Alignment.centerLeft,

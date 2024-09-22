@@ -4,22 +4,23 @@ Simple, easy and highly customizable input field for creating a dropdown list of
 
 ## Key Features
 
-With Select Field and Multi Select Field, you can:
+With `SelectField()` and `MultiSelectField()`, you can:
 
-- Customize the input field and dropdown menu to your preferences.
-- Create custom widgets for the dropdown menu.
-- Control menu's behaviour.
+- Fully customize both the input field and dropdown menu to suit your needs.
+- Implement custom widgets within the dropdown menu.
+- Have complete control over the dropdown menu’s behavior.
+- Easily search through the available options for quicker selection.
 
 ## Limitations
 
 - Custom animation of a dropdown menu is not supported.
+- If you provide your own menu controller or text controller, you are responsible for managing their behavior.
 
 ## Example
 
 <p><img src="https://github.com/Boykista/select_field/raw/main/doc/menu_below.gif" alt="An animated image of the select field (menu below)" height="400"/>
-<img src="https://github.com/Boykista/select_field/raw/main/doc/menu_above.gif" alt="An animated image of the select field (menu above)" height="400"/>
-<img src="https://github.com/Boykista/select_field/raw/main/doc/multi_select_custom.gif" alt="An animated image of the multi select field with custom menu control" height="400"/>
 <img src="https://github.com/Boykista/select_field/raw/main/doc/multi_select_default.gif" alt="An animated image of the default multi select field" height="400"/>
+<img src="https://github.com/Boykista/select_field/raw/main/doc/search_select.gif" alt="An animated image of search through options" height="400"/>
 <p>
 
 ```dart
@@ -132,6 +133,9 @@ SelectField<String>(
 An example of the MultiSelectField() with custom menu control:
 
 ```dart
+import 'package:flutter/material.dart';
+import 'package:select_field/select_field.dart';
+
 class MultiSelectOptionsControl<String> extends StatefulWidget {
   final List<Option<String>> options;
 
@@ -164,6 +168,14 @@ class _MultiSelectOptionsControlState<String>
     });
   }
 
+  void onTapOutside() {
+    menuController.isExpanded = false;
+  }
+
+  void onTap() {
+    menuController.isExpanded = !menuController.isExpanded;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -175,12 +187,20 @@ class _MultiSelectOptionsControlState<String>
   }
 
   @override
+  void dispose() {
+    menuController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         MultiSelectField<String>(
           options: widget.options,
           fieldText: 'Select fruit',
+          onTap: onTap,
+          onTapOutside: onTapOutside,
           onOptionsSelected: onOptionSelected,
           menuController: menuController,
           menuDecoration: MenuDecoration(

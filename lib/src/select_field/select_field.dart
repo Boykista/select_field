@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:select_field/src/option.dart';
 import 'package:select_field/src/menu_decoration.dart';
 import 'package:select_field/src/options_menu.dart';
+import 'package:select_field/src/search_options.dart';
 import 'package:select_field/src/select_field/select_field_menu_controller.dart';
 
 typedef IconBuilder = Widget Function(BuildContext context, bool isExpanded);
@@ -22,11 +23,13 @@ class SelectField<T> extends StatefulWidget {
   final void Function(Option<T> option)? onOptionSelected;
 
   /// Specifies the [TextEditingController] for [SelectField].
+  ///
+  /// By providing [TextEditingController] you are responsible for `text` behaviour.
   final TextEditingController? textController;
 
   /// Allows you to control menu's behavior or add a custom control.
   ///
-  /// With `customControl` you are responsible for `focus`, `text` and `menu` behaviour.
+  /// By providing [SelectFieldMenuController] you are responsible for `menu's` behaviour.
   final SelectFieldMenuController<T>? menuController;
 
   /// See [FocusNode]
@@ -105,6 +108,9 @@ class SelectField<T> extends StatefulWidget {
     void Function(Option<T> option) onOptionSelected,
   )? optionBuilder;
 
+  /// By providing [SearchOptions] search is enabled. Note that options' widget height is now fixed to a provided value.
+  final SearchOptions<T>? searchOptions;
+
   /// Restoration ID to save and restore the state of the form field.
   final String? restorationId;
 
@@ -151,6 +157,7 @@ class SelectField<T> extends StatefulWidget {
     this.prefixIconBuilder,
     this.suffixIconBuilder,
     this.optionBuilder,
+    this.searchOptions,
     this.restorationId,
     this.strutStyle,
     this.textDirection,
@@ -172,6 +179,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   LayerLink layerLink = LayerLink();
   late final SelectFieldMenuController<T> menuController;
   late final bool isMenuControllerProvided;
+  late final bool isTextControllerProvided;
 
   void initOverlay() {
     final renderBox = context.findRenderObject() as RenderBox;
@@ -189,6 +197,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
           onOptionSelected: onOptionSelected,
           decoration: widget.menuDecoration,
           menuController: menuController,
+          searchOptions: widget.searchOptions,
           builder: widget.optionBuilder,
         ),
       ),
@@ -208,14 +217,26 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
   }
 
   void onOptionSelected(Option<T> option) async {
-    menuController.selectedOption = option;
-    setControllerText(option.label);
+    final currentOption = menuController.selectedOption;
+    final shouldDiselectOption = currentOption == option;
+
+    if (shouldDiselectOption) {
+      menuController.selectedOption = null;
+      if (!isTextControllerProvided) {
+        setControllerText('');
+      }
+    } else {
+      menuController.selectedOption = option;
+      if (!isTextControllerProvided) {
+        setControllerText(option.label);
+      }
+    }
 
     if (widget.onOptionSelected != null) {
       widget.onOptionSelected!(option);
     }
 
-    if (!isMenuControllerProvided) {
+    if (!isMenuControllerProvided && !shouldDiselectOption) {
       menuController.isExpanded = false;
     }
   }
@@ -249,6 +270,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
     textController = widget.textController ?? TextEditingController();
     menuController = widget.menuController ?? SelectFieldMenuController();
     isMenuControllerProvided = widget.menuController != null;
+    isTextControllerProvided = widget.textController != null;
 
     if (widget.initialOption != null) {
       menuController.selectedOption = widget.initialOption;
@@ -268,6 +290,17 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         focusNode.unfocus();
       }
     });
+
+    if (widget.searchOptions != null) {
+      focusNode.addListener(() {
+        if (!focusNode.hasFocus && menuController.isExpanded) {
+          menuController.isExpanded = false;
+          if (!isTextControllerProvided) {
+            setControllerText(menuController.selectedOption?.label ?? '');
+          }
+        }
+      });
+    }
   }
 
   @override
@@ -295,7 +328,7 @@ class _SelectFieldState<T> extends State<SelectField<T>> {
         onTapOutside: (event) => handleOnTapOutside(),
         child: TextFormField(
           controller: textController,
-          readOnly: true,
+          readOnly: widget.searchOptions == null,
           focusNode: focusNode,
           onChanged: widget.onTextChanged,
           onTap: handleOnTap,
